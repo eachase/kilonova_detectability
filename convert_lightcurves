@@ -1,0 +1,202 @@
+#!/usr/bin/env python
+
+__author__ = 'Eve Chase <eachase@lanl.gov>'
+
+from astropy import units as u
+import argparse
+import glob
+import numpy as np
+import os
+import pandas as pd
+
+from timer import Timer
+
+from cocteau import observations, filereaders, matrix
+
+
+
+
+def get_magmatrix_from_spectra(filenames, angles, bandnames,
+    redshift=0):
+
+    # Set up KN properties dataframe
+    knprops = pd.DataFrame(columns=['angle','morph','wind','md','vd','mw','vw'])
+
+    lightcurve_collection = []
+    count = 0
+
+    fr = filereaders.LANLFileReader()
+
+    for i, filename in enumerate(filenames):
+
+        print(f'Reading file {i}: {filename}')
+        t = Timer()
+        t.start()
+
+        spectra = fr.read_spectra(filename, 
+            angles=angles)
+
+        #print("Time to read spectra for one sim and all angles")
+        #t.stop()
+
+        # Extract properties from filename
+        fileprops = fr.get_knprops_from_filename(filename)
+
+
+        # For each angle
+        for angle_col in angles:
+
+            # Gather all spectra from a given angle
+            spectra_at_angle = spectra[angle_col]
+
+            # Report angle index
+            fileprops_angle = fileprops.copy()
+            fileprops_angle['angle'] = angle_col
+            knprops = knprops.append(fileprops_angle,
+                ignore_index=True)
+
+            lightcurves_per_band = None
+            for j, bandname in enumerate(bandnames):
+
+     
+                t = Timer()
+                t.start()
+
+               
+                # Make a lightcurve from the band
+                lc = observations.LightCurve(spectra=spectra_at_angle, 
+                    band=bands[bandname], redshift=redshift)
+                
+                #print("Time to compute lightcurve")
+                #t.stop()
+                
+                lightcurve = pd.DataFrame({'time': lc.times.value,
+                    bandname: lc.magnitudes.value})
+
+                # Combine magnitudes for each band
+                if lightcurves_per_band is None:
+                    lightcurves_per_band = lightcurve
+                else:
+                    lightcurves_per_band = pd.merge(lightcurves_per_band,
+                        lightcurve, on='time')
+
+            # Combine magnitudes for each angle
+            lightcurve_collection.append(lightcurves_per_band)
+            count += 1
+
+    # Combine all magnitudes
+    lightcurves = pd.concat(lightcurve_collection, keys=np.arange(count))
+
+    return matrix.MagMatrix(lightcurves.drop(columns=['time']),
+        bandnames=bandnames, times=lightcurves['time'],
+        knprops=knprops, time_units=u.day, mag_units=u.ABmag)
+
+
+
+
+
+if __name__ == '__main__':
+
+    # Input parameters
+    parser = argparse.ArgumentParser()
+
+    # Base directory
+    parser.add_argument('--data-dir', type=str,
+	    default='/turquoise/usr/projects/w20_knspectra/ASCII/kn_sim_cube1.2/')
+        #default='/Users/r349989/Documents/kilonovae/data/kn_sim_cube1.2/')
+
+    # Output directory
+    parser.add_argument('-o', '--out-dir', type=str, default='data/lightcurves/')
+
+    # Filter directory
+    parser.add_argument('--filter-dir', type=str,
+	    default='/users/eachase/packages/cocteau/filters/')
+        #default='/Users/r349989/Documents/kilonovae/data/filters/')
+    parser.add_argument('-f', '--filters', nargs='+', type=str)
+
+    # Set number of angular bins to select
+    parser.add_argument('--angle-factor', type=int, default=1)
+
+    parser.add_argument('-a', '--angles', nargs='+', type=int)
+
+    # Provide distance to kilonova
+    parser.add_argument('--redshift', type=float, default=0.0098)
+
+    args = parser.parse_args()
+
+    # Overall timer
+    overall_timer = Timer()
+    overall_timer.start()
+    
+    # Set up timer
+    setup_timer = Timer()
+    setup_timer.start()
+
+
+    # Read each filter
+    fr = filereaders.FileReader()
+    fr_tab = filereaders.TabFileReader()
+
+    bands = {}
+    instruments = set()
+    for bandname in args.filters:
+        # Select band object
+        filetype, instr, filename = filereaders.band_files[bandname]
+        filename = f'{args.filter_dir}{filename}'
+        print(filename)
+
+        # Add instrument to set of instruments
+        instruments.add(instr)
+
+        # Store the band
+        if filetype == 'norm':
+            bands[bandname] = fr.read_band(filename, 
+                bandname=bandname, wl_units=u.Angstrom)
+        elif filetype == 'tab':
+            bands[bandname] = fr_tab.read_band(filename,
+                bandname=bandname, wl_units=u.Angstrom)
+
+    # Get bandnames
+    bandnames = bands.keys()
+
+    # Set angles of interest
+    if args.angles is None:
+        angles = np.arange(0, 54, args.angle_factor)
+        filename_extension = ''
+    else:
+        angles = args.angles
+        filename_extension = f"{('_').join([str(i) for i in angles])}"
+
+    # Include bands in name
+    filename_extension += f"_{('_').join([str(i) for i in bandnames])}"
+    print(angles)
+
+    # Prepare filenames --FIXME hardcoding
+    filenames = glob.glob(f'{args.data_dir}Run_T*_dyn_all_lanth_wind*_all_md*_vd*_mw*_vw*_spec*.dat')
+
+    print(f'Number of files: {len(filenames)}')
+
+    redshift = args.redshift
+    print(redshift)
+
+    print("Time for setup")
+    setup_timer.stop()
+
+    # Compute magmatrix
+    magmatrix = get_magmatrix_from_spectra(filenames, 
+        angles, bandnames, redshift)
+
+    # Store magmatrix as pickle
+    filename_extension += f'_z{redshift}.pkl'
+    for instr in instruments:
+        # Make output directory for instrument
+        out_dir = f'{args.out_dir}{instr}/z_{redshift}/'
+        if not os.path.exists(out_dir):
+            os.makedirs(out_dir)
+
+        magmatrix.knprops.to_pickle(f'{out_dir}knprops{filename_extension}')
+        magmatrix.matrix.to_pickle(f'{out_dir}magmatrix{filename_extension}')
+        magmatrix.times.to_pickle(f'{out_dir}times{filename_extension}')
+
+    print('Overall Time')
+    overall_timer.stop()
