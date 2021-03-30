@@ -110,8 +110,8 @@ if __name__ == '__main__':
 
     # Filter directory
     parser.add_argument('--filter-dir', type=str,
-	    default='/users/eachase/packages/cocteau/filters/')
-        #default='/Users/r349989/Documents/kilonovae/data/filters/')
+	    default='data/filters/')
+
     parser.add_argument('-f', '--filters', nargs='+', type=str)
 
     # Set number of angular bins to select
