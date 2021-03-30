@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH -A w20_knspectra
 #SBATCH --time=05:00:00
-#SBATCH --array=1-42%36
+#SBATCH --array=1-12%36
 #SBATCH --ntasks-per-node=36
 #SBATCH --mem-per-cpu=600
-#SBATCH -D /users/eachase/kilonovae/projects/kn_detectability/
+#SBATCH -D /users/eachase/kilonovae/projects/kilonova_detectability/
 #SBATCH -o log/job_%A_%a.out
 #SBATCH -e log/job_%A_%a.err
 
