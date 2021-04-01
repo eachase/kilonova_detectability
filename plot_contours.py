@@ -43,6 +43,12 @@ band_titles = {
     'ZTF_g' : r'ZTF/$\textit{g}$-band',
     'ZTF_r' : r'ZTF/$\textit{r}$-band',
     'ZTF_i' : r'ZTF/$\textit{i}$-band',
+    'u-band': r'LSST/$\textit{u}$-band',
+    'g-band': r'LSST/$\textit{g}$-band',
+    'r-band': r'LSST/$\textit{r}$-band',
+    'i-band': r'LSST/$\textit{i}$-band',
+    'z-band': r'LSST/$\textit{z}$-band',
+    'y-band': r'LSST/$\textit{y}$-band',
 }
 
 
@@ -129,7 +135,7 @@ def fraction_detected(data_dict, lim_mags, redshift,
         level=0).sum().values.flatten() > 0)[0].shape[0]
     num_lc = magmatrix.knprops.shape[0]
 
-    print(redshift, time, num_det / num_lc, num_det, num_lc)
+    #print(redshift, time, num_det / num_lc, num_det, num_lc)
     return num_det / num_lc
 
 
@@ -267,7 +273,10 @@ def plot_contours(bands, num_timesteps=10,
 
     #contour_levels = [0.01, 0.1, 0.5]
     #contour_levels = [0.1, 0.5, 0.9]
-    contour_levels = [0.05, 0.5, 0.95]
+    if instr == 'SIBEX':
+        contour_levels = [0.1, 0.5, 0.9]
+    else:
+        contour_levels = [0.05, 0.5, 0.95]
     contour_levels_rev = contour_levels[::-1]
     contour_thresh = ax.contour(X, Y, Z, levels=contour_levels, colors='0.75', alpha=0)
 
@@ -319,10 +328,10 @@ def plot_contours(bands, num_timesteps=10,
                         ax.set_title(f'{instr}: z = {max_z:.2f}')
                     elif band in band_titles:
                         ax.set_title(
-                            f'{band_titles[band]}: z = {max_z:.2f}')
+                            f'{band_titles[band]}')
                     elif instr == 'Swift':
                          ax.set_title(
-                            f'{instr}/UVOT.{band}: z = {max_z:.2f}')
+                            f'Swift/UVOT.{band}')
                     else:
                         ax.set_title(
                             f'{instr}/{band}: z = {max_z:.2f}')
@@ -356,7 +365,7 @@ if __name__ == '__main__':
 
     # Number of timesteps
     parser.add_argument('-n', '--num-timesteps', type=int, 
-        default=10)
+        default=50)
 
     # Maximum redshift to plot
     parser.add_argument('-z', '--max-z', type=float, 
@@ -412,24 +421,28 @@ if __name__ == '__main__':
             param_restrict[param] = [float(i) for i in \
             args.paramvals[idx].strip('][').split(', ')]
 
+    # Read band
+    bandname = args.filter[0]
+    filetype, instr, filename = filereaders.band_files[bandname]
+    filename = f'{args.filter_dir}{filename}'
+
+    if filetype == 'norm':
+        fr = filereaders.FileReader()
+        band = fr.read_band(filename,
+            bandname=bandname, wl_units=u.Angstrom)
+    elif filetype == 'tab':
+        fr = filereaders.TabFileReader()
+        band = fr.read_band(filename,
+            bandname=bandname, wl_units=u.Angstrom)
+
+    # Report effective wavelength
+    print(bandname, band.effective_wavelength().to(u.Angstrom))    
+
+
     # Compute AT2017gfo detectability
     plot_gw170817 = False
     if args.gw170817:
         print('Adding AT2017gfo data')
-
-        # Read band
-        bandname = args.filter[0]
-        filetype, instr, filename = filereaders.band_files[bandname]
-        filename = f'{args.filter_dir}{filename}'
-
-        if filetype == 'norm':
-            fr = filereaders.FileReader()
-            band = fr.read_band(filename,
-                bandname=bandname, wl_units=u.Angstrom)
-        elif filetype == 'tab':
-            fr = filereaders.TabFileReader()
-            band = fr.read_band(filename,
-                bandname=bandname, wl_units=u.Angstrom)
 
         # Compute contour for AT2017gfo detectability in band
         times, max_z = utils.compute_at2017gfo(
