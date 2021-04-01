@@ -41,7 +41,9 @@ band_titles = {
     'RomanJ': r'Roman/$\textit{J}$-band',
     'RomanH': r'Roman/$\textit{H}$-band',
     'RomanF': r'Roman/$\textit{F}$-band',
-
+    'ZTF_g' : r'ZTF/$\textit{g}$-band',
+    'ZTF_r' : r'ZTF/$\textit{r}$-band',
+    'ZTF_i' : r'ZTF/$\textit{i}$-band',
 }
 
 
@@ -128,7 +130,7 @@ def fraction_detected(data_dict, lim_mags, redshift,
         level=0).sum().values.flatten() > 0)[0].shape[0]
     num_lc = magmatrix.knprops.shape[0]
 
-    #print(redshift, time, num_det / num_lc, num_det, num_lc)
+    print(redshift, time, num_det / num_lc, num_det, num_lc)
     return num_det / num_lc
 
 
@@ -264,13 +266,13 @@ def plot_contours(bands, num_timesteps=10,
     fig.colorbar(sm, ticks=np.linspace(0, 1, 6), 
         label='Fraction Detectable', pad=0.125)
 
-    contour_levels = [0.01, 0.1, 0.5]
-    #contour_levels = [0.25, 0.5, 0.75]
+    #contour_levels = [0.01, 0.1, 0.5]
     #contour_levels = [0.1, 0.5, 0.9]
+    contour_levels = [0.05, 0.5, 0.95]
     contour_levels_rev = contour_levels[::-1]
     contour_thresh = ax.contour(X, Y, Z, levels=contour_levels, colors='0.75', alpha=0)
 
-    ls_arr = ['dashdot', 'dotted', 'dashed']
+    ls_arr = ['solid', 'dashdot', 'dotted', 'dashed']
 
     count = 0
     contour_data_bylevel = {}
@@ -298,15 +300,19 @@ def plot_contours(bands, num_timesteps=10,
                     
             ax.plot(contour_data[:,0], smooth_interp, 
                 lw=5, ls=ls, color='0.75', label=f'{level}')
-        # Report maximum z for 10th percentile curve
-        if count == 2:
+
+        # Report maximum z for each percentile curve
+        max_z = np.max(contour_data[:,1])
+        print(level, max_z)
+
+        # Set title
+        if level == 0.5:
             if custom_title is not None:
                 ax.set_title(custom_title)
 
             else:
 
                 try:
-                    max_z = np.max(contour_data[:,1])
                     #ax.axhline(y=max_z, c='r', ls='-.')
                     if instr == 'SIBEX':
                         ax.set_title(f'{instr}: ' + r'$m_{\mathrm{lim}}$' + f' = {lim_mags[0]}') 
@@ -343,7 +349,7 @@ if __name__ == '__main__':
 
     # Base directory
     parser.add_argument('-d', '--data-dir', type=str,
-        default='data/lightcurves/')
+        default='../../data/converted_lightcurves/')
 
     # Limiting magnitude
     parser.add_argument('-m', '--lim-mag', type=float, 
@@ -351,7 +357,7 @@ if __name__ == '__main__':
 
     # Number of timesteps
     parser.add_argument('-n', '--num-timesteps', type=int, 
-        default=50)
+        default=10)
 
     # Maximum redshift to plot
     parser.add_argument('-z', '--max-z', type=float, 
