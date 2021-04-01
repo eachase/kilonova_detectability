@@ -29,9 +29,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable, axes_size
 
 # Local imports
-from cocteau import matrix, observations
-from cocteau import upperlimit_utils as utils
-
+from cocteau import matrix, observations, filereaders
+from cocteau import observational_utils as utils
 
 # Some custom titles
 band_titles = {
@@ -371,12 +370,19 @@ if __name__ == '__main__':
     parser.add_argument('-f', '--filter', type=str, 
         default=['r-band'], nargs='+')
 
+    # Filter directory
+    parser.add_argument('--filter-dir', type=str,
+        default='data/filters/')
+
     # Title for plot
     parser.add_argument('-t', '--title', type=str, default=None)
 
     # Include legend
     parser.add_argument('--legend', default=True, action='store_true')
     parser.add_argument('--no-legend', dest='legend', action='store_false')
+
+    # Add in AT2017gfo detectability data
+    parser.add_argument('--gw170817', default=False, action='store_true')
 
     # Parameters to restrict
     parser.add_argument('--param', type=str, default=None,
@@ -406,12 +412,46 @@ if __name__ == '__main__':
             param_restrict[param] = [float(i) for i in \
             args.paramvals[idx].strip('][').split(', ')]
 
+    # Compute AT2017gfo detectability
+    plot_gw170817 = False
+    if args.gw170817:
+        print('Adding AT2017gfo data')
+
+        # Read band
+        bandname = args.filter[0]
+        filetype, instr, filename = filereaders.band_files[bandname]
+        filename = f'{args.filter_dir}{filename}'
+
+        if filetype == 'norm':
+            fr = filereaders.FileReader()
+            band = fr.read_band(filename,
+                bandname=bandname, wl_units=u.Angstrom)
+        elif filetype == 'tab':
+            fr = filereaders.TabFileReader()
+            band = fr.read_band(filename,
+                bandname=bandname, wl_units=u.Angstrom)
+
+        # Compute contour for AT2017gfo detectability in band
+        times, max_z = utils.compute_at2017gfo(
+            data_file='data/GW170817.json', band=band,
+            lim_mag=args.lim_mag[0])
+        if max_z is not None:
+            plot_gw170817 = True
+
+
     ax, _, _, _ = plot_contours(args.filter, 
         num_timesteps=args.num_timesteps, 
         lim_mags=args.lim_mag, instr_list=args.instr, 
         data_dir=args.data_dir, max_z=args.max_z,
         param_restrict=param_restrict,
         custom_title=args.title, legend=args.legend)
+
+    # Add in AT2017gfo observational data
+    if plot_gw170817:
+        # Add to figure
+        ax.plot(times, max_z, lw=5, ls='-', color='magenta', 
+            label='AT2017gfo')
+        ax.legend(labelcolor='white', frameon=True, facecolor='dimgray')
 
     # Save figure
     filename = f'{args.out_dir}'
