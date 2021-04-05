@@ -102,8 +102,8 @@ if __name__ == '__main__':
 
     # Base directory
     parser.add_argument('--data-dir', type=str,
-	    default='/turquoise/usr/projects/w20_knspectra/ASCII/kn_sim_cube1.2/')
-        #default='/Users/r349989/Documents/kilonovae/data/kn_sim_cube1.2/')
+	    #default='/turquoise/usr/projects/w20_knspectra/ASCII/kn_sim_cube1.2/')
+        default='/Users/r349989/Documents/kilonovae/data/kn_sim_cube1.2/')
 
     # Output directory
     parser.add_argument('-o', '--out-dir', type=str, default='data/lightcurves/')
