@@ -49,6 +49,14 @@ band_titles = {
     'i-band': r'LSST/$\textit{i}$-band',
     'z-band': r'LSST/$\textit{z}$-band',
     'y-band': r'LSST/$\textit{y}$-band',
+    'Dorado': r'Dorado/$\textit{NUV}_D$',
+    'g-bg':   r'$\textit{g}$-band',
+    'i-bg':   r'$\textit{i}$-band',
+    'r-bg':   r'$\textit{r}$-band',
+    'u-bg':   r'$\textit{u}$-band',
+    'z-bg':   r'$\textit{z}$-band',
+    'vr-bg':   r'$\textit{q}$-band',
+
 }
 
 
@@ -157,8 +165,13 @@ def plot_contours(bands, num_timesteps=10,
         instr = instr_list[idx]
         data_dict_band = {}
 
+        if instr == 'MeerLICHT':
+            instr_plot = 'BlackGEM'
+        else:
+            instr_plot = instr
+
         for magmatrix_file in glob.glob(
-            f'{data_dir}{instr}/*/magmatrix_{band}*pkl'):
+            f'{data_dir}{instr_plot}/*/magmatrix_{band}*pkl'):
 
             redshift = float(
                 magmatrix_file.split('/')[-2].split('_')[-1])
@@ -237,11 +250,11 @@ def plot_contours(bands, num_timesteps=10,
 
     # Second y axis for luminosity distance
     ax2 = ax.twinx()
-    if zmax <= 0.1:
-        dist_arr = [10, 50, 100, 200, 300, 400, 500]
+    if zmax < 0.2:
+        dist_arr = [10, 50, 100, 200, 300, 400, 500, 600, 700]
         u_dist = u.Mpc
     elif zmax <= 0.6:
-        dist_arr = [0.04, 0.1, 0.5, 1, 1.5, 2, 2.5, 
+        dist_arr = [0.1, 0.5, 1, 1.5, 2, 2.5, 
             3, 3.5, 4]
         u_dist = u.Gpc
     elif zmax <= 1.0:
@@ -324,8 +337,10 @@ def plot_contours(bands, num_timesteps=10,
                     #ax.axhline(y=max_z, c='r', ls='-.')
                     if instr == 'SIBEX':
                         ax.set_title(f'{instr}: ' + r'$m_{\mathrm{lim}}$' + f' = {lim_mags[0]}') 
-                    elif band == instr:
-                        ax.set_title(f'{instr}: z = {max_z:.2f}')
+                    #elif band == instr:
+                    #    ax.set_title(f'{instr}: z = {max_z:.2f}')
+                    elif instr in ['BlackGEM', 'MeerLICHT']:
+                        ax.set_title(f'{instr}/{band_titles[band]}')
                     elif band in band_titles:
                         ax.set_title(
                             f'{band_titles[band]}')
