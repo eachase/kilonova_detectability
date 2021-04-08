@@ -1,23 +1,36 @@
 #!/bin/bash
 
+# ULTRASAT
+python plot_contours.py --instr 'ULTRASAT' -f 'ULTRASAT' --lim-mag 22.3 -z 0.15
+
+# DDOTI
+python plot_contours.py --instr 'DDOTI' -f 'w-band' --lim-mag 19.5 -z 0.05
+
+
+# DECam
+python plot_contours.py --instr 'DECam' -f 'DECam_i' --lim-mag 22.5 --gw170817
+python plot_contours.py --instr 'DECam' -f 'DECam_z' --lim-mag 21.8 --gw170817
+
+
 # BlackGEM
-python plot_contours.py --instr 'BlackGEM' -f 'u-bg' --lim-mag 21.5 -z 0.25 --gw170817 -n 10
-python plot_contours.py --instr 'BlackGEM' -f 'g-bg' --lim-mag 22.6 -z 0.25 --gw170817 -n 10
-python plot_contours.py --instr 'BlackGEM' -f 'vr-bg' --lim-mag 23 -z 0.25 --gw170817 -n 10
-python plot_contours.py --instr 'BlackGEM' -f 'r-bg' --lim-mag 22.3 -z 0.25 --gw170817 -n 10
-python plot_contours.py --instr 'BlackGEM' -f 'i-bg' --lim-mag 21.8 -z 0.25 --gw170817 -n 10
-python plot_contours.py --instr 'BlackGEM' -f 'z-bg' --lim-mag 20.7 -z 0.25 --gw170817 -n 10
+python plot_contours.py --instr 'BlackGEM' -f 'u-bg' --lim-mag 21.5 -z 0.25 --gw170817
+python plot_contours.py --instr 'BlackGEM' -f 'g-bg' --lim-mag 22.6 -z 0.25 --gw170817 
+python plot_contours.py --instr 'BlackGEM' -f 'vr-bg' --lim-mag 23 -z 0.25 --gw170817
+python plot_contours.py --instr 'BlackGEM' -f 'r-bg' --lim-mag 22.3 -z 0.25 --gw170817
+python plot_contours.py --instr 'BlackGEM' -f 'i-bg' --lim-mag 21.8 -z 0.25 --gw170817
+python plot_contours.py --instr 'BlackGEM' -f 'z-bg' --lim-mag 20.7 -z 0.25 --gw170817
 
 
 
 # MeerLICHT
-python plot_contours.py --instr 'MeerLICHT' -f 'u-bg' --lim-mag 19.06 -z 0.1 --gw170817 -n 10
-python plot_contours.py --instr 'MeerLICHT' -f 'g-bg' --lim-mag 20.2 -z 0.1 --gw170817 -n 10
-python plot_contours.py --instr 'MeerLICHT' -f 'vr-bg' --lim-mag 20.6 -z 0.1 --gw170817 -n 10
-python plot_contours.py --instr 'MeerLICHT' -f 'r-bg' --lim-mag 19.9 -z 0.1 --gw170817 -n 10
-python plot_contours.py --instr 'MeerLICHT' -f 'i-bg' --lim-mag 19.4 -z 0.1 --gw170817 -n 10
-python plot_contours.py --instr 'MeerLICHT' -f 'z-bg' --lim-mag 18.3 -z 0.1 --gw170817 -n 10
+python plot_contours.py --instr 'MeerLICHT' -f 'u-bg' --lim-mag 19.06 -z 0.1 --gw170817
+python plot_contours.py --instr 'MeerLICHT' -f 'g-bg' --lim-mag 20.2 -z 0.1 --gw170817
+python plot_contours.py --instr 'MeerLICHT' -f 'vr-bg' --lim-mag 20.6 -z 0.1 --gw170817
+python plot_contours.py --instr 'MeerLICHT' -f 'r-bg' --lim-mag 19.9 -z 0.1 --gw170817
+python plot_contours.py --instr 'MeerLICHT' -f 'i-bg' --lim-mag 19.4 -z 0.1 --gw170817
+python plot_contours.py --instr 'MeerLICHT' -f 'z-bg' --lim-mag 18.3 -z 0.1 --gw170817
 
+exit
 # Swift
 python plot_contours.py --instr 'Swift' -f 'U-band' -m 19.9 -z 0.1
 
