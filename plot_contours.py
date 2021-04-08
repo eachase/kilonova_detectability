@@ -56,7 +56,13 @@ band_titles = {
     'u-bg':   r'$\textit{u}$-band',
     'z-bg':   r'$\textit{z}$-band',
     'vr-bg':   r'$\textit{q}$-band',
-
+    'DECam_i':r'DECam/$\textit{i}$-band',
+    'DECam_z':r'DECam/$\textit{z}$-band',
+    'ULTRASAT': r'ULTRASAT/$\textit{NUV}$',
+    'w-band': r'DDOTI/$\textit{w}$-band',
+    'VistaY': r'VISTA/$\textit{Y}$-band',
+    'VistaJ': r'VISTA/$\textit{J}$-band',
+    'VistaKs': r'VISTA/$\textit{K}_s$-band',
 }
 
 
@@ -143,7 +149,7 @@ def fraction_detected(data_dict, lim_mags, redshift,
         level=0).sum().values.flatten() > 0)[0].shape[0]
     num_lc = magmatrix.knprops.shape[0]
 
-    #print(redshift, time, num_det / num_lc, num_det, num_lc)
+    print(redshift, time, num_det / num_lc, num_det, num_lc)
     return num_det / num_lc
 
 
@@ -294,7 +300,6 @@ def plot_contours(bands, num_timesteps=10,
     contour_thresh = ax.contour(X, Y, Z, levels=contour_levels, colors='0.75', alpha=0)
 
     ls_arr = ['solid', 'dashdot', 'dotted', 'dashed']
-
     count = 0
     contour_data_bylevel = {}
     for idx, collection in enumerate(contour_thresh.collections):
@@ -308,19 +313,20 @@ def plot_contours(bands, num_timesteps=10,
             contour_data_bylevel[level].append(contour_data)
 
             print(contour_data[:,0].shape)
-            try:
-                smooth_interp = savgol_filter(contour_data[:,1], 17, 3)
-            except:
+            if contour_data[:,0].shape[0] > 2:
                 try:
-                    smooth_interp = savgol_filter(contour_data[:,1], 11, 3)
+                    smooth_interp = savgol_filter(contour_data[:,1], 17, 3)
                 except:
                     try:
-                        smooth_interp = savgol_filter(contour_data[:,1], 3, 1)
+                        smooth_interp = savgol_filter(contour_data[:,1], 11, 3)
                     except:
-                        ax.set_title('Failed')
-                    
-            ax.plot(contour_data[:,0], smooth_interp, 
-                lw=5, ls=ls, color='0.75', label=f'{level}')
+                        try:
+                            smooth_interp = savgol_filter(contour_data[:,1], 3, 1)
+                        except:
+                            ax.set_title('Failed')
+                        
+                ax.plot(contour_data[:,0], smooth_interp, 
+                    lw=5, ls=ls, color='0.75', label=f'{level}')
 
         # Report maximum z for each percentile curve
         max_z = np.max(contour_data[:,1])
@@ -478,8 +484,9 @@ if __name__ == '__main__':
     if plot_gw170817:
         # Add to figure
         ax.plot(times, max_z, lw=5, ls='-', color='magenta', 
-            label='AT2017gfo')
-        ax.legend(labelcolor='white', frameon=True, facecolor='dimgray')
+            label=r'AT\,2017gfo')
+        if args.legend:
+            ax.legend(labelcolor='white', frameon=True, facecolor='dimgray')
 
     # Save figure
     filename = f'{args.out_dir}'
