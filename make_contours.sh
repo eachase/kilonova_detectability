@@ -1,16 +1,24 @@
 #!/bin/bash
 
+# VISTA
+python plot_contours.py --instr 'VISTA' -f 'VistaZ' --lim-mag 22.0 -z 0.2 --gw170817
+python plot_contours.py --instr 'VISTA' -f 'VistaY' --lim-mag 21.5 -z 0.2 --gw170817
+python plot_contours.py --instr 'VISTA' -f 'VistaJ' --lim-mag 21.0 -z 0.2 --gw170817
+python plot_contours.py --instr 'VISTA' -f 'VistaH' --lim-mag 21.0 -z 0.2 --gw170817
+python plot_contours.py --instr 'VISTA' -f 'VistaKs' --lim-mag 20.0 -z 0.2 --gw170817
+
+exit
+
 # ULTRASAT
 python plot_contours.py --instr 'ULTRASAT' -f 'ULTRASAT' --lim-mag 22.3 -z 0.15
 
 # DDOTI
-python plot_contours.py --instr 'DDOTI' -f 'w-band' --lim-mag 19.5 -z 0.05
+python plot_contours.py --instr 'DDOTI' -f 'w-band' --lim-mag 20.5 -z 0.1
 
 
 # DECam
 python plot_contours.py --instr 'DECam' -f 'DECam_i' --lim-mag 22.5 --gw170817
 python plot_contours.py --instr 'DECam' -f 'DECam_z' --lim-mag 21.8 --gw170817
-
 
 # BlackGEM
 python plot_contours.py --instr 'BlackGEM' -f 'u-bg' --lim-mag 21.5 -z 0.25 --gw170817
@@ -20,8 +28,6 @@ python plot_contours.py --instr 'BlackGEM' -f 'r-bg' --lim-mag 22.3 -z 0.25 --gw
 python plot_contours.py --instr 'BlackGEM' -f 'i-bg' --lim-mag 21.8 -z 0.25 --gw170817
 python plot_contours.py --instr 'BlackGEM' -f 'z-bg' --lim-mag 20.7 -z 0.25 --gw170817
 
-
-
 # MeerLICHT
 python plot_contours.py --instr 'MeerLICHT' -f 'u-bg' --lim-mag 19.06 -z 0.1 --gw170817
 python plot_contours.py --instr 'MeerLICHT' -f 'g-bg' --lim-mag 20.2 -z 0.1 --gw170817
@@ -30,7 +36,6 @@ python plot_contours.py --instr 'MeerLICHT' -f 'r-bg' --lim-mag 19.9 -z 0.1 --gw
 python plot_contours.py --instr 'MeerLICHT' -f 'i-bg' --lim-mag 19.4 -z 0.1 --gw170817
 python plot_contours.py --instr 'MeerLICHT' -f 'z-bg' --lim-mag 18.3 -z 0.1 --gw170817
 
-exit
 # Swift
 python plot_contours.py --instr 'Swift' -f 'U-band' -m 19.9 -z 0.1
 
@@ -57,10 +62,10 @@ python plot_contours.py --instr 'Roman' -f 'RomanH' --lim-mag 25.4 -z 1.0 --gw17
 
 
 # Extra Roman figures for mass variability -- figures in paper
-python plot_contours.py --instr 'Roman' -f 'RomanH' --lim-mag 25.4 --param 'md' --paramvals '[0.1]' --title 'Roman/$\textit{H}$-band: 0.1 $M_{\odot}$ low-$Y_e$ mass' --no-legend
-python plot_contours.py --instr 'Roman' -f 'RomanH' --lim-mag 25.4 --param 'md' --paramvals '[0.001]' --title 'Roman/$\textit{H}$-band: 0.001 $M_{\odot}$ low-$Y_e$ mass'
-python plot_contours.py --instr 'Roman' -f 'RomanH' --lim-mag 25.4 --param 'mw' --paramvals '[0.1]' --title 'Roman/$\textit{H}$-band: 0.1 $M_{\odot}$ high-$Y_e$ mass' --no-legend
-python plot_contours.py --instr 'Roman' -f 'RomanH' --lim-mag 25.4 --param 'mw' --paramvals '[0.001]' --title 'Roman/$\textit{H}$-band: 0.001 $M_{\odot}$ high-$Y_e$ mass' --no-legend
+python plot_contours.py --instr 'Roman' -f 'RomanH' --lim-mag 25.4 --param 'md' --paramvals '[0.1]' --title 'Roman/$\textit{H}$-band:  $m_{\mathrm{dyn}} = 0.1 M_{\odot}$' --no-legend
+python plot_contours.py --instr 'Roman' -f 'RomanH' --lim-mag 25.4 --param 'md' --paramvals '[0.001]' --title 'Roman/$\textit{H}$-band: $m_{\mathrm{dyn}} = 0.001 M_{\odot}$'
+python plot_contours.py --instr 'Roman' -f 'RomanH' --lim-mag 25.4 --param 'mw' --paramvals '[0.1]' --title 'Roman/$\textit{H}$-band: $m_{\mathrm{wind}} = 0.1 M_{\odot}$' --no-legend
+python plot_contours.py --instr 'Roman' -f 'RomanH' --lim-mag 25.4 --param 'mw' --paramvals '[0.001]' --title 'Roman/$\textit{H}$-band: $m_{\mathrm{wind}} = 0.001 M_{\odot}$' --no-legend
 
 python plot_contours.py --instr 'Roman' -f 'RomanH' --lim-mag 25.4 --param 'mw' 'md' --paramvals '[0.001]' '[0.001]' --title 'Roman/$\textit{H}$-band: 0.002 $M_{\odot}$ total ejecta mass'
 python plot_contours.py --instr 'Roman' -f 'RomanH' --lim-mag 25.4 --param 'mw' 'md' --paramvals '[0.1]' '[0.1]' --title 'Roman/$\textit{H}$-band: 0.2 $M_{\odot}$ total ejecta mass' --no-legend
