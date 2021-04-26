@@ -63,6 +63,8 @@ band_titles = {
     'VistaY': r'VISTA/$\textit{Y}$-band',
     'VistaJ': r'VISTA/$\textit{J}$-band',
     'VistaKs': r'VISTA/$\textit{K}_s$-band',
+    'VistaZ': r'VISTA/$\textit{Z}$-band',
+    'VistaH': r'VISTA/$\textit{H}$-band',
 }
 
 
@@ -149,7 +151,7 @@ def fraction_detected(data_dict, lim_mags, redshift,
         level=0).sum().values.flatten() > 0)[0].shape[0]
     num_lc = magmatrix.knprops.shape[0]
 
-    print(redshift, time, num_det / num_lc, num_det, num_lc)
+    #print(redshift, time, num_det / num_lc, num_det, num_lc)
     return num_det / num_lc
 
 
