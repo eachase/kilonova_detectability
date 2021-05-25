@@ -9,8 +9,6 @@ import numpy as np
 import os
 import pandas as pd
 
-from timer import Timer
-
 from cocteau import observations, filereaders, matrix
 
 
@@ -30,14 +28,9 @@ def get_magmatrix_from_spectra(filenames, angles, bandnames,
     for i, filename in enumerate(filenames):
 
         print(f'Reading file {i}: {filename}')
-        t = Timer()
-        t.start()
 
         spectra = fr.read_spectra(filename, 
             angles=angles)
-
-        #print("Time to read spectra for one sim and all angles")
-        #t.stop()
 
         # Extract properties from filename
         fileprops = fr.get_knprops_from_filename(filename)
@@ -59,16 +52,9 @@ def get_magmatrix_from_spectra(filenames, angles, bandnames,
             for j, bandname in enumerate(bandnames):
 
      
-                t = Timer()
-                t.start()
-
-               
                 # Make a lightcurve from the band
                 lc = observations.LightCurve(spectra=spectra_at_angle, 
                     band=bands[bandname], redshift=redshift)
-                
-                #print("Time to compute lightcurve")
-                #t.stop()
                 
                 lightcurve = pd.DataFrame({'time': lc.times.value,
                     bandname: lc.magnitudes.value})
@@ -112,8 +98,6 @@ if __name__ == '__main__':
     parser.add_argument('--filter-dir', type=str,
 	    default='data/filters/')
 
-    parser.add_argument('-f', '--filters', nargs='+', type=str)
-
     # Set number of angular bins to select
     parser.add_argument('--angle-factor', type=int, default=1)
 
@@ -123,14 +107,6 @@ if __name__ == '__main__':
     parser.add_argument('--redshift', type=float, default=0.0098)
 
     args = parser.parse_args()
-
-    # Overall timer
-    overall_timer = Timer()
-    overall_timer.start()
-    
-    # Set up timer
-    setup_timer = Timer()
-    setup_timer.start()
 
 
     # Read each filter
@@ -179,9 +155,6 @@ if __name__ == '__main__':
     redshift = args.redshift
     print(redshift)
 
-    print("Time for setup")
-    setup_timer.stop()
-
     # Compute magmatrix
     magmatrix = get_magmatrix_from_spectra(filenames, 
         angles, bandnames, redshift)
@@ -198,5 +171,4 @@ if __name__ == '__main__':
         magmatrix.matrix.to_pickle(f'{out_dir}magmatrix{filename_extension}')
         magmatrix.times.to_pickle(f'{out_dir}times{filename_extension}')
 
-    print('Overall Time')
-    overall_timer.stop()
+
