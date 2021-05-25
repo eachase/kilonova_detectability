@@ -65,6 +65,15 @@ band_titles = {
     'VistaKs': r'VISTA/$\textit{K}_s$-band',
     'VistaZ': r'VISTA/$\textit{Z}$-band',
     'VistaH': r'VISTA/$\textit{H}$-band',
+    'PrimeH': r'PRIME/$\textit{H}$-band',
+    'PrimeZ': r'PRIME/$\textit{Z}$-band',
+    'PrimeJ': r'PRIME/$\textit{J}$-band',
+    'PrimeY': r'PRIME/$\textit{Y}$-band',
+    'GOTO': r'GOTO/$\textit{L}$-band',
+    'WinterY': r'WINTER/$\textit{Y}$-band',
+    'WinterJ': r'WINTER/$\textit{J}$-band',
+    'WinterH': r'WINTER/$\textit{H}_s$-band',
+
 }
 
 
@@ -151,7 +160,7 @@ def fraction_detected(data_dict, lim_mags, redshift,
         level=0).sum().values.flatten() > 0)[0].shape[0]
     num_lc = magmatrix.knprops.shape[0]
 
-    #print(redshift, time, num_det / num_lc, num_det, num_lc)
+    print(redshift, time, num_det / num_lc, num_det, num_lc)
     return num_det / num_lc
 
 
@@ -199,7 +208,7 @@ def plot_contours(bands, num_timesteps=10,
 
         data_dict[band] = data_dict_band
 
-        
+
         # Construct redshift array from data 
         if redshifts.shape[0] > 1:
             redshifts = np.intersect1d(redshifts,
@@ -336,6 +345,7 @@ def plot_contours(bands, num_timesteps=10,
 
         # Set title
         if level == 0.5:
+
             if custom_title is not None:
                 ax.set_title(custom_title)
 
@@ -354,7 +364,7 @@ def plot_contours(bands, num_timesteps=10,
                             f'{band_titles[band]}')
                     elif instr == 'Swift':
                          ax.set_title(
-                            f'Swift/UVOT.{band}')
+                            r'UVOT/$\textit{u}$-band')
                     else:
                         ax.set_title(
                             f'{instr}/{band}: z = {max_z:.2f}')
@@ -388,6 +398,7 @@ if __name__ == '__main__':
 
     # Number of timesteps
     parser.add_argument('-n', '--num-timesteps', type=int, 
+        #default=10)
         default=50)
 
     # Maximum redshift to plot
@@ -473,7 +484,6 @@ if __name__ == '__main__':
             lim_mag=args.lim_mag[0])
         if max_z is not None:
             plot_gw170817 = True
-
 
     ax, _, _, _ = plot_contours(args.filter, 
         num_timesteps=args.num_timesteps, 
