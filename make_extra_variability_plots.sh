@@ -139,10 +139,6 @@ python plot_contours.py --instr 'ULTRASAT' -f 'ULTRASAT' --lim-mag 22.3 --param 
 
 
 # VISTA
-python plot_contours.py --instr 'VISTA' -f 'VistaZ' --lim-mag 22.0 --param 'md' --paramvals '[0.1]' --title 'VISTA/$\textit{Z}$-band:  $m_{\mathrm{dyn}} = 0.1 M_{\odot}$' --no-legend -z 0.1
-python plot_contours.py --instr 'VISTA' -f 'VistaZ' --lim-mag 22.0 --param 'md' --paramvals '[0.001]' --title 'VISTA/$\textit{Z}$-band:  $m_{\mathrm{dyn}} = 0.001 M_{\odot}$' --no-legend -z 0.1
-python plot_contours.py --instr 'VISTA' -f 'VistaZ' --lim-mag 22.0 --param 'mw' --paramvals '[0.1]' --title 'VISTA/$\textit{Z}$-band:  $m_{\mathrm{wind}} = 0.1 M_{\odot}$' --no-legend -z 0.1
-python plot_contours.py --instr 'VISTA' -f 'VistaZ' --lim-mag 22.0 --param 'mw' --paramvals '[0.001]' --title 'VISTA/$\textit{Z}$-band:  $m_{\mathrm{wind}} = 0.001 M_{\odot}$' --no-legend -z 0.1
 python plot_contours.py --instr 'VISTA' -f 'VistaY' --lim-mag 21.5 --param 'md' --paramvals '[0.1]' --title 'VISTA/$\textit{Y}$-band:  $m_{\mathrm{dyn}} = 0.1 M_{\odot}$' --no-legend -z 0.1
 python plot_contours.py --instr 'VISTA' -f 'VistaY' --lim-mag 21.5 --param 'md' --paramvals '[0.001]' --title 'VISTA/$\textit{Y}$-band:  $m_{\mathrm{dyn}} = 0.001 M_{\odot}$' --no-legend -z 0.1
 python plot_contours.py --instr 'VISTA' -f 'VistaY' --lim-mag 21.5 --param 'mw' --paramvals '[0.1]' --title 'VISTA/$\textit{Y}$-band:  $m_{\mathrm{wind}} = 0.1 M_{\odot}$' --no-legend -z 0.1

@@ -15,7 +15,6 @@ python plot_contours.py --instr 'PRIME' -f 'PrimeJ' --lim-mag 19.6 --gw170817 -z
 python plot_contours.py --instr 'PRIME' -f 'PrimeH' --lim-mag 18.4 --gw170817 -z 0.1
 
 # VISTA
-python plot_contours.py --instr 'VISTA' -f 'VistaZ' --lim-mag 22.0 -z 0.2 --gw170817
 python plot_contours.py --instr 'VISTA' -f 'VistaY' --lim-mag 21.5 -z 0.2 --gw170817
 python plot_contours.py --instr 'VISTA' -f 'VistaJ' --lim-mag 21.0 -z 0.2 --gw170817
 python plot_contours.py --instr 'VISTA' -f 'VistaH' --lim-mag 21.0 -z 0.2 --gw170817
