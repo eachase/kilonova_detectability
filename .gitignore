@@ -1,13 +1,15 @@
 *pkl
-*VRO/*_0.*png
-*ZTF/*_0.*png
-*SIBEX/*
-*Dorado/*
-*ULTRASAT/*_0.*png
-*WINTER/*_0.*png
-*PRIME/*_0.*png
-*MeerLICHT/*_0.*png
-*BlackGEM/*_0.*png
-*DECam/*_0.*png
-*DDOTI/*_0.*png
+figures/contours/VRO/*_0.*png
+figures/contours/ZTF/*_0.*png
+figures/contours/SIBEX/*
+figures/contours/Dorado/*
+figures/contours/ULTRASAT/*_0.*png
+figures/contours/WINTER/*_0.*png
+figures/contours/PRIME/*_0.*png
+figures/contours/MeerLICHT/*_0.*png
+figures/contours/BlackGEM/*_0.*png
+figures/contours/DECam/*_0.*png
+figures/contours/DDOTI/*_0.*png
+figures/contours/VISTA/*_0.*png
+figures/contours/GOTO/*_0.*png
 
