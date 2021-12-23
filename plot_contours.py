@@ -73,7 +73,12 @@ band_titles = {
     'WinterY': r'WINTER/$\textit{Y}$-band',
     'WinterJ': r'WINTER/$\textit{J}$-band',
     'WinterH': r'WINTER/$\textit{H}_s$-band',
-
+    'Gamow0': r'Gamow (5000 - 6400 $\mathrm{\AA}$)',
+    'Gamow1': r'Gamow (6400 - 8700 $\mathrm{\AA}$)',
+    'Gamow2': r'Gamow (8700 - 12,000 $\mathrm{\AA}$)',
+    'Gamow3': r'Gamow (12,000 - 17,000 $\mathrm{\AA}$)',
+    'Gamow4': r'Gamow (17,000 - 24,000 $\mathrm{\AA}$)',
+    'RAPTOR': r'RAPTOR (4000 - 10,000 $\mathrm{\AA}$)'
 }
 
 
