@@ -31,6 +31,7 @@ def get_magmatrix_from_spectra(filenames, angles, bandnames,
 
         spectra = fr.read_spectra(filename, 
             angles=angles)
+        
 
         # Extract properties from filename
         fileprops = fr.get_knprops_from_filename(filename)
@@ -41,6 +42,9 @@ def get_magmatrix_from_spectra(filenames, angles, bandnames,
 
             # Gather all spectra from a given angle
             spectra_at_angle = spectra[angle_col]
+
+            # Manually overwrite number of angles
+            spectra_at_angle.num_angles = 54
 
             # Report angle index
             fileprops_angle = fileprops.copy()
@@ -98,6 +102,8 @@ if __name__ == '__main__':
     parser.add_argument('--filter-dir', type=str,
 	    default='data/filters/')
 
+    parser.add_argument('-f', '--filters', nargs='+', type=str)
+
     # Set number of angular bins to select
     parser.add_argument('--angle-factor', type=int, default=1)
 
@@ -107,7 +113,6 @@ if __name__ == '__main__':
     parser.add_argument('--redshift', type=float, default=0.0098)
 
     args = parser.parse_args()
-
 
     # Read each filter
     fr = filereaders.FileReader()
@@ -148,7 +153,14 @@ if __name__ == '__main__':
     print(angles)
 
     # Prepare filenames --FIXME hardcoding
-    filenames = glob.glob(f'{args.data_dir}Run_T*_dyn_all_lanth_wind*_all_md*_vd*_mw*_vw*_spec*.dat')
+#    filenames = glob.glob(f'{args.data_dir}Run_T*_dyn_all_lanth_wind*_all_md*_vd*_mw*_vw*_spec*.dat')#[:25]
+
+    filenames = [
+        f'{args.data_dir}Run_TP_dyn_all_lanth_wind1_all_md0.01_vd0.15_mw0.1_vw0.3_spec_2020-06-22.dat',
+        f'{args.data_dir}Run_TP_dyn_all_lanth_wind2_all_md0.01_vd0.15_mw0.01_vw0.3_spec_2020-06-22.dat',
+        f'{args.data_dir}Run_TP_dyn_all_lanth_wind1_all_md0.01_vd0.3_mw0.1_vw0.3_spec_2020-03-24.dat',
+        f'{args.data_dir}Run_TP_dyn_all_lanth_wind2_all_md0.03_vd0.3_mw0.01_vw0.3_spec_2020-04-25.dat']
+
 
     print(f'Number of files: {len(filenames)}')
 
@@ -160,7 +172,7 @@ if __name__ == '__main__':
         angles, bandnames, redshift)
 
     # Store magmatrix as pickle
-    filename_extension += f'_z{redshift}.pkl'
+    filename_extension += f'_z{redshift}_overallfit.pkl'
     for instr in instruments:
         # Make output directory for instrument
         out_dir = f'{args.out_dir}{instr}/z_{redshift}/'
