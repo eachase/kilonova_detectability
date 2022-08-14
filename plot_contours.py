@@ -78,7 +78,24 @@ band_titles = {
     'Gamow2': r'Gamow (8700 - 12,000 $\mathrm{\AA}$)',
     'Gamow3': r'Gamow (12,000 - 17,000 $\mathrm{\AA}$)',
     'Gamow4': r'Gamow (17,000 - 24,000 $\mathrm{\AA}$)',
-    'RAPTOR': r'RAPTOR (4000 - 10,000 $\mathrm{\AA}$)'
+    'RAPTOR': r'RAPTOR (4000 - 10,000 $\mathrm{\AA}$)',
+    'F560W': r'JWST/MIRI/F560W',
+    'F770W': r'JWST/MIRI/F770W',
+    'F1000W': r'JWST/MIRI/F1000W',
+    'F1130W': r'JWST/MIRI/F1130W',
+    'F1280W': r'JWST/MIRI/F1280W',
+    'F1500W': r'JWST/MIRI/F1500W',
+    'F1800W': r'JWST/MIRI/F1800W',
+    'F2100W': r'JWST/MIRI/F2100W',
+    'F2550W': r'JWST/MIRI/F2550W',
+    'U-band': r'Swift/$\textit{U}$-band',
+    'B-band': r'Swift/$\textit{B}$-band',
+    'UVM2'  : r'Swift/UVM2',
+    'UVW1'  : r'Swift/UVW1',
+    'UVW2'  : r'Swift/UVW2',
+    'GenericU'  : r'Generic $\textit{u}$-band',
+    'GenericI'  : r'Generic $\textit{i}$-band',
+    'GenericK'  : r'Generic $\textit{K}$-band',
 }
 
 
